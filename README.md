@@ -1,2 +1,0 @@
-# ShareFolder
-ShareEducation
