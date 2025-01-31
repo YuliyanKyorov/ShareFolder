@@ -1,0 +1,109 @@
+using System;
+using System.Linq;
+
+class ArrayManipulator
+{
+    static void Main(string[] args)
+    {
+        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        string command;
+        
+        while ((command = Console.ReadLine()) != "end")
+        {
+            string[] commandParts = command.Split();
+            string action = commandParts[0];
+
+            switch (action)
+            {
+                case "exchange":
+                    int index = int.Parse(commandParts[1]);
+                    arr = Exchange(arr, index);
+                    break;
+                case "max":
+                    string maxType = commandParts[1];
+                    Max(arr, maxType);
+                    break;
+                case "min":
+                    string minType = commandParts[1];
+                    Min(arr, minType);
+                    break;
+                case "first":
+                    int countFirst = int.Parse(commandParts[1]);
+                    string firstType = commandParts[2];
+                    First(arr, countFirst, firstType);
+                    break;
+                case "last":
+                    int countLast = int.Parse(commandParts[1]);
+                    string lastType = commandParts[2];
+                    Last(arr, countLast, lastType);
+                    break;
+            }
+        }
+        
+        Console.WriteLine($"[{string.Join(", ", arr)}]");
+    }
+
+    static int[] Exchange(int[] arr, int index)
+    {
+        if (index < 0 || index >= arr.Length)
+        {
+            Console.WriteLine("Invalid index");
+            return arr;
+        }
+        
+        int[] result = arr.Skip(index + 1).Concat(arr.Take(index + 1)).ToArray();
+        return result;
+    }
+
+    static void Max(int[] arr, string type)
+    {
+        int[] filtered = arr.Where(x => type == "even" ? x % 2 == 0 : x % 2 != 0).ToArray();
+        if (filtered.Length == 0)
+        {
+            Console.WriteLine("No matches");
+            return;
+        }
+        
+        int maxValue = filtered.Max();
+        int index = Array.LastIndexOf(arr, maxValue);
+        Console.WriteLine(index);
+    }
+
+    static void Min(int[] arr, string type)
+    {
+        int[] filtered = arr.Where(x => type == "even" ? x % 2 == 0 : x % 2 != 0).ToArray();
+        if (filtered.Length == 0)
+        {
+            Console.WriteLine("No matches");
+            return;
+        }
+        
+        int minValue = filtered.Min();
+        int index = Array.LastIndexOf(arr, minValue);
+        Console.WriteLine(index);
+    }
+
+    static void First(int[] arr, int count, string type)
+    {
+        if (count > arr.Length)
+        {
+            Console.WriteLine("Invalid count");
+            return;
+        }
+        
+        int[] result = arr.Where(x => type == "even" ? x % 2 == 0 : x % 2 != 0).Take(count).ToArray();
+        Console.WriteLine($"[{string.Join(", ", result)}]");
+    }
+
+    static void Last(int[] arr, int count, string type)
+    {
+        if (count > arr.Length)
+        {
+            Console.WriteLine("Invalid count");
+            return;
+        }
+        
+        int[] result = arr.Where(x => type == "even" ? x % 2 == 0 : x % 2 != 0).Reverse().Take(count).Reverse().ToArray();
+        Console.WriteLine($"[{string.Join(", ", result)}]");
+    }
+}
